@@ -1,0 +1,625 @@
+/* ==========================================================
+   VARIABLES
+========================================================== */
+
+:root {
+
+    /* Colors */
+    --primary: #4f46e5;
+    --primary-dark: #3730a3;
+    --secondary: #06b6d4;
+    --accent: #7c3aed;
+
+    --success: #22c55e;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+
+    --bg: #f7f9fc;
+    --surface: #ffffff;
+    --surface-2: #f1f5f9;
+
+    --text: #1e293b;
+    --text-light: #64748b;
+
+    --border: rgba(0,0,0,.08);
+
+    /* Glass */
+
+    --glass: rgba(255,255,255,.65);
+    --glass-border: rgba(255,255,255,.45);
+
+    /* Radius */
+
+    --radius-sm: .6rem;
+    --radius: 1rem;
+    --radius-lg: 1.4rem;
+    --radius-xl: 2rem;
+
+    /* Shadows */
+
+    --shadow-sm:
+        0 5px 15px rgba(15,23,42,.06);
+
+    --shadow:
+
+        0 15px 40px rgba(15,23,42,.08);
+
+    --shadow-lg:
+
+        0 25px 60px rgba(15,23,42,.12);
+
+    /* Transition */
+
+    --transition:
+
+        all .30s ease;
+
+}
+
+/* ==========================================================
+   DARK MODE
+========================================================== */
+
+[data-bs-theme="dark"]{
+
+    --bg:#08111f;
+
+    --surface:#0f172a;
+
+    --surface-2:#182437;
+
+    --text:#f8fafc;
+
+    --text-light:#94a3b8;
+
+    --border:rgba(255,255,255,.08);
+
+    --glass:rgba(15,23,42,.65);
+
+    --glass-border:rgba(255,255,255,.06);
+
+}
+
+/* ==========================================================
+   RESET
+========================================================== */
+
+*{
+
+    margin:0;
+
+    padding:0;
+
+    box-sizing:border-box;
+
+}
+
+html{
+
+    scroll-behavior:smooth;
+
+}
+
+body{
+
+    background:var(--bg);
+
+    color:var(--text);
+
+    font-family:"Nunito",sans-serif;
+
+    min-height:100vh;
+
+    overflow-x:hidden;
+
+    padding-top:95px;
+
+    position:relative;
+
+}
+
+/* ==========================================================
+   TYPOGRAPHY
+========================================================== */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6{
+
+    font-family:"Montserrat",sans-serif;
+
+    color:var(--text);
+
+    font-weight:700;
+
+    line-height:1.2;
+
+}
+
+.display-3{
+
+    font-weight:800;
+
+    letter-spacing:-1px;
+
+}
+
+p{
+
+    color:var(--text-light);
+
+    line-height:1.8;
+
+}
+
+a{
+
+    text-decoration:none;
+
+    color:inherit;
+
+    transition:var(--transition);
+
+}
+
+img{
+
+    max-width:100%;
+
+    display:block;
+
+}
+
+/* ==========================================================
+   SELECTION
+========================================================== */
+
+::selection{
+
+    background:var(--primary);
+
+    color:white;
+
+}
+
+/* ==========================================================
+   SCROLLBAR
+========================================================== */
+
+::-webkit-scrollbar{
+
+    width:10px;
+
+}
+
+::-webkit-scrollbar-track{
+
+    background:transparent;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:var(--primary);
+
+    border-radius:50px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:var(--primary-dark);
+
+}
+
+/* ==========================================================
+   BACKGROUND
+========================================================== */
+
+.bg-gradient-circle{
+
+    position:fixed;
+
+    border-radius:50%;
+
+    filter:blur(90px);
+
+    opacity:.35;
+
+    z-index:-1;
+
+    animation:floatCircle 18s ease-in-out infinite;
+
+}
+
+.circle-one{
+
+    width:420px;
+
+    height:420px;
+
+    background:#4f46e5;
+
+    top:-120px;
+
+    left:-100px;
+
+}
+
+.circle-two{
+
+    width:360px;
+
+    height:360px;
+
+    background:#06b6d4;
+
+    bottom:-120px;
+
+    right:-80px;
+
+    animation-delay:6s;
+
+}
+
+@keyframes floatCircle{
+
+    0%{
+
+        transform:translateY(0)
+                  translateX(0);
+
+    }
+
+    50%{
+
+        transform:translateY(-35px)
+                  translateX(25px);
+
+    }
+
+    100%{
+
+        transform:translateY(0)
+                  translateX(0);
+
+    }
+
+}
+
+/* ==========================================================
+   CONTAINER
+========================================================== */
+
+.container{
+
+    max-width:1280px;
+
+}
+
+/* ==========================================================
+   GLASS NAVBAR
+========================================================== */
+
+.glass-navbar{
+
+    backdrop-filter:blur(20px);
+
+    -webkit-backdrop-filter:blur(20px);
+
+    background:var(--glass);
+
+    border-bottom:1px solid var(--glass-border);
+
+    transition:.35s;
+
+    padding:.9rem 0;
+
+}
+
+.glass-navbar.scrolled{
+
+    box-shadow:var(--shadow);
+
+}
+
+/* ==========================================================
+   LOGO
+========================================================== */
+
+.logo-box{
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:12px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    color:white;
+
+    font-size:1.15rem;
+
+    background:
+
+    linear-gradient(
+        135deg,
+        var(--primary),
+        var(--secondary)
+    );
+
+    box-shadow:
+
+    0 10px 30px
+    rgba(79,70,229,.35);
+
+}
+
+.navbar-brand{
+
+    font-size:1.25rem;
+
+    color:var(--text)!important;
+
+}
+
+.navbar-brand:hover{
+
+    transform:translateY(-2px);
+
+}
+
+/* ==========================================================
+   NAV LINKS
+========================================================== */
+
+.navbar-nav{
+
+    gap:.25rem;
+
+}
+
+.nav-link{
+
+    color:var(--text-light)!important;
+
+    font-weight:700;
+
+    border-radius:999px;
+
+    padding:.65rem 1rem!important;
+
+    transition:var(--transition);
+
+    position:relative;
+
+}
+
+.nav-link:hover{
+
+    color:var(--primary)!important;
+
+    background:rgba(79,70,229,.08);
+
+}
+
+.nav-link.active{
+
+    color:white!important;
+
+    background:
+
+    linear-gradient(
+        135deg,
+        var(--primary),
+        var(--accent)
+    );
+
+    box-shadow:
+
+    0 12px 25px
+    rgba(79,70,229,.30);
+
+}
+
+/* ==========================================================
+   NAVBAR TOGGLER
+========================================================== */
+
+.navbar-toggler{
+
+    border:none;
+
+    color:var(--text);
+
+}
+
+.navbar-toggler:focus{
+
+    box-shadow:none;
+
+}
+
+/* ==========================================================
+   ICON BUTTONS
+========================================================== */
+
+.btn-icon{
+
+    width:46px;
+
+    height:46px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:var(--surface);
+
+    color:var(--text);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:1rem;
+
+    box-shadow:var(--shadow-sm);
+
+    transition:var(--transition);
+
+}
+
+.btn-icon:hover{
+
+    transform:translateY(-3px);
+
+    background:var(--primary);
+
+    color:white;
+
+}
+
+/* ==========================================================
+   DROPDOWN
+========================================================== */
+
+.dropdown-menu{
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:18px;
+
+    padding:.6rem;
+
+    box-shadow:var(--shadow);
+
+}
+
+.dropdown-item{
+
+    border-radius:12px;
+
+    padding:.7rem 1rem;
+
+    transition:var(--transition);
+
+}
+
+.dropdown-item:hover{
+
+    background:rgba(79,70,229,.10);
+
+    color:var(--primary);
+
+}
+
+/* ==========================================================
+   BUTTONS
+========================================================== */
+
+.btn{
+
+    transition:var(--transition);
+
+    font-weight:700;
+
+}
+
+.btn-gradient{
+
+    color:white;
+
+    border:none;
+
+    background:
+
+    linear-gradient(
+        135deg,
+        var(--primary),
+        var(--accent)
+    );
+
+    box-shadow:
+
+    0 18px 35px
+    rgba(79,70,229,.25);
+
+}
+
+.btn-gradient:hover{
+
+    color:white;
+
+    transform:translateY(-4px);
+
+    box-shadow:
+
+    0 24px 45px
+    rgba(79,70,229,.35);
+
+}
+
+.btn-outline-primary{
+
+    border:2px solid var(--primary);
+
+    color:var(--primary);
+
+}
+
+.btn-outline-primary:hover{
+
+    background:var(--primary);
+
+    border-color:var(--primary);
+
+    color:white;
+
+}
+
+/* ==========================================================
+   UTILITIES
+========================================================== */
+
+.text-gradient{
+
+    background:
+
+    linear-gradient(
+        135deg,
+        var(--primary),
+        var(--secondary)
+    );
+
+    -webkit-background-clip:text;
+
+    -webkit-text-fill-color:transparent;
+
+}
+
+.shadow-hover{
+
+    transition:var(--transition);
+
+}
+
+.shadow-hover:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:var(--shadow-lg);
+
+} 

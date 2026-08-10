@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Site Info -->
+    {% if title %}
+      <title>FastAPI Blog - {{ title }}</title>
+    {% else %}
+      <title>FastAPI Blog</title>
+    {% endif %}
+    <meta name="description" content="FastAPI Tutorial">
+    <meta name="author" content="Phyo Thant">
+
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="FastAPI Blog">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <meta property="og:image:alt" content="">
+
+    <!-- Preconnect for Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Custom Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
+      rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+          crossorigin="anonymous">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" type="text/css"href="{{ url_for("static", path='css/main.css') }}">
+
+    <!-- Theme color -->
+    <meta name="theme-color" content="#527c9f">
+
+    <!-- Favicons -->
+    <link rel="icon" href="{{ url_for('static', path='icons/icon.ico') }}" sizes="any">
+    <link rel="icon" href="{{ url_for('static', path='icons/icon.svg') }}" type="image/svg+xml">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', path='icons/icon.png') }}">
+    <link rel="manifest" href="{{ url_for('static', path='site.webmanifest') }}">
+    <style>
+      :root {
+  /* Fonts */
+  --font-heading: "Montserrat", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: "Nunito", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Brand & Colors - Soft, vivid palette */
+  --color-steel: #527c9f;
+  --color-steel-hover: #3f6a8c;
+  --color-steel-soft: rgba(82, 124, 159, 0.12);
+  --color-steel-glow: rgba(82, 124, 159, 0.25);
+
+  --color-bg-body: #f4f7fb;
+  --color-bg-content: #ffffff;
+  --color-text-primary: #2d3748;
+  --color-text-heading: #1a202c;
+  --color-text-muted: #718096;
+
+  --color-nav-link: #e2e8f0;
+  --color-nav-link-hover: #ffffff;
+  --color-link-hover: #3b82f6;
+
+  --color-border: #e2e8f0;
+  --color-border-light: #edf2f7;
+
+  /* Soft shadows & radius */
+  --radius-sm: 0.6rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.4rem;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 8px 24px -6px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 16px 40px -10px rgba(15, 23, 42, 0.12);
+  --shadow-hover: 0 20px 40px -12px rgba(15, 23, 42, 0.15);
+
+  /* Spacing */
+  --spacing-xl: 5.5rem;
+
+  /* Sizing */
+  --article-img-size: 4.25rem;
+  --account-img-size: 8rem;
+}
+
+/* ======================
+   Base
+====================== */
+body {
+  font-family: var(--font-body);
+  background: linear-gradient(165deg, #f0f5fb 0%, #e8f0f8 45%, #f4f7fb 100%);
+  background-attachment: fixed;
+  color: var(--color-text-primary);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ======================
+   Rain Animation
+====================== */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  top: -20%;
+  left: 0;
+  width: 100%;
+  height: 120%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Layer 1 - larger, slower drops */
+body::before {
+  background-image: 
+    radial-gradient(2px 18px at 20px 30px, rgba(130, 170, 210, 0.45) 50%, transparent),
+    radial-gradient(2px 18px at 80px 70px, rgba(130, 170, 210, 0.35) 50%, transparent),
+    radial-gradient(1.5px 14px at 150px 20px, rgba(130, 170, 210, 0.4) 50%, transparent),
+    radial-gradient(2px 20px at 220px 90px, rgba(130, 170, 210, 0.3) 50%, transparent),
+    radial-gradient(1.5px 16px at 300px 40px, rgba(130, 170, 210, 0.4) 50%, transparent),
+    radial-gradient(2px 18px at 380px 110px, rgba(130, 170, 210, 0.35) 50%, transparent),
+    radial-gradient(1.5px 15px at 460px 25px, rgba(130, 170, 210, 0.4) 50%, transparent),
+    radial-gradient(2px 19px at 540px 80px, rgba(130, 170, 210, 0.3) 50%, transparent),
+    radial-gradient(1.5px 14px at 620px 50px, rgba(130, 170, 210, 0.4) 50%, transparent),
+    radial-gradient(2px 17px at 700px 100px, rgba(130, 170, 210, 0.35) 50%, transparent);
+  background-size: 780px 160px;
+  animation: rain 6s linear infinite;
+  opacity: 0.55;
+}
+
+/* Layer 2 - smaller, faster drops */
+body::after {
+  background-image: 
+    radial-gradient(1.5px 12px at 40px 40px, rgba(150, 190, 230, 0.4) 50%, transparent),
+    radial-gradient(1px 10px at 120px 80px, rgba(150, 190, 230, 0.35) 50%, transparent),
+    radial-gradient(1.5px 13px at 200px 20px, rgba(150, 190, 230, 0.4) 50%, transparent),
+    radial-gradient(1px 11px at 280px 100px, rgba(150, 190, 230, 0.3) 50%, transparent),
+    radial-gradient(1.5px 12px at 360px 50px, rgba(150, 190, 230, 0.4) 50%, transparent),
+    radial-gradient(1px 10px at 440px 90px, rgba(150, 190, 230, 0.35) 50%, transparent),
+    radial-gradient(1.5px 13px at 520px 30px, rgba(150, 190, 230, 0.4) 50%, transparent),
+    radial-gradient(1px 11px at 600px 70px, rgba(150, 190, 230, 0.3) 50%, transparent),
+    radial-gradient(1.5px 12px at 680px 45px, rgba(150, 190, 230, 0.4) 50%, transparent);
+  background-size: 760px 140px;
+  animation: rain 3.5s linear infinite;
+  opacity: 0.4;
+  animation-delay: -2s;
+}
+
+@keyframes rain {
+  0% {
+    transform: translateY(-20%);
+  }
+  100% {
+    transform: translateY(20%);
+  }
+}
+
+/* Make sure content stays above the rain */
+main,
+header,
+footer,
+.navbar,
+.content-section {
+  position: relative;
+  z-index: 1;
+}
+
+main {
+  padding-top: var(--spacing-xl);
+  padding-bottom: 3.5rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--color-text-heading);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.navbar-brand {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: -0.4px;
+}
+
+a {
+  text-decoration: none;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--color-steel);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ======================
+   Navigation
+====================== */
+.bg-steel {
+  background: linear-gradient(135deg, #4a7396 0%, #527c9f 50%, #5d8aab 100%) !important;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(82, 124, 159, 0.25);
+}
+
+.site-header .navbar {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.site-header .navbar-nav .nav-link {
+  color: var(--color-nav-link);
+  font-weight: 500;
+  border-radius: var(--radius-full);
+  padding: 0.4rem 1rem !important;
+  transition: all 0.25s ease;
+}
+
+.site-header .navbar-nav .nav-link:hover,
+.site-header .navbar-nav .nav-link:focus {
+  color: var(--color-nav-link-hover);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.site-header .navbar-nav .nav-link.active {
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+/* ======================
+   Content Sections (Cards)
+====================== */
+.content-section {
+  background: var(--color-bg-content);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.content-section:hover {
+  box-shadow: var(--shadow-hover);
+  border-color: #c5d4e8;
+  transform: translateY(-3px);
+}
+
+/* ======================
+   Articles
+====================== */
+.article-title {
+  color: var(--color-text-heading);
+  font-weight: 700;
+  transition: color 0.2s ease;
+}
+
+a.article-title:hover,
+a.article-title:focus {
+  color: var(--color-steel);
+}
+
+.article-content {
+  white-space: pre-line;
+  font-size: 1.15rem;
+  line-height: 1.75;
+  color: var(--color-text-primary);
+}
+
+.article-img {
+  height: var(--article-img-size);
+  width: var(--article-img-size);
+  flex-shrink: 0;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 4px 12px rgba(82, 124, 159, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.article-img:hover {
+  transform: scale(1.06);
+  box-shadow: 0 6px 18px rgba(82, 124, 159, 0.3);
+}
+
+.article-metadata {
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid var(--color-border-light);
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.article-metadata a {
+  color: var(--color-steel);
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.article-metadata a:hover,
+.article-metadata a:focus {
+  color: var(--color-steel-hover);
+}
+
+.article-svg {
+  width: 1.4rem;
+  height: 1.4rem;
+  vertical-align: middle;
+  opacity: 0.7;
+}
+
+/* ======================
+   Account / Profile
+====================== */
+.account-img {
+  height: var(--account-img-size);
+  width: var(--account-img-size);
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid #fff;
+  box-shadow: 0 8px 24px rgba(82, 124, 159, 0.25);
+}
+
+.account-heading {
+  font-size: 2.4rem;
+  letter-spacing: -0.03em;
+}
+
+.file-input-sm {
+  max-width: 320px;
+}
+
+/* ======================
+   Buttons - Soft & modern
+====================== */
+.btn {
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn-outline-primary {
+  --bs-btn-color: var(--color-steel);
+  --bs-btn-border-color: var(--color-steel);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--color-steel);
+  --bs-btn-hover-border-color: var(--color-steel);
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--color-steel-hover);
+  --bs-btn-active-border-color: var(--color-steel-hover);
+  box-shadow: 0 2px 8px rgba(82, 124, 159, 0.15);
+}
+
+.btn-outline-primary:hover {
+  box-shadow: 0 6px 16px rgba(82, 124, 159, 0.3);
+}
+
+.btn-primary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--color-steel);
+  --bs-btn-border-color: var(--color-steel);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--color-steel-hover);
+  --bs-btn-hover-border-color: var(--color-steel-hover);
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #365a78;
+  --bs-btn-active-border-color: #365a78;
+  box-shadow: 0 4px 14px rgba(82, 124, 159, 0.35);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 8px 22px rgba(82, 124, 159, 0.4);
+}
+
+.btn-outline-secondary {
+  --bs-btn-color: #4a5568;
+  --bs-btn-border-color: #a0aec0;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #718096;
+  --bs-btn-hover-border-color: #718096;
+}
+
+.btn-outline-danger {
+  --bs-btn-color: #c53030;
+  --bs-btn-border-color: #e53e3e;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #c53030;
+  --bs-btn-hover-border-color: #c53030;
+}
+
+.btn-danger {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #c53030;
+  --bs-btn-border-color: #c53030;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #9b2c2c;
+  --bs-btn-hover-border-color: #9b2c2c;
+  box-shadow: 0 4px 14px rgba(197, 48, 48, 0.3);
+}
+
+/* ======================
+   Dark Mode
+====================== */
+[data-bs-theme="dark"] {
+  --color-bg-body: #0f172a;
+  --color-bg-content: #1e293b;
+  --color-text-primary: #e2e8f0;
+  --color-text-heading: #f8fafc;
+  --color-text-muted: #94a3b8;
+  --color-border: #334155;
+  --color-border-light: #475569;
+  --color-steel-soft: rgba(130, 170, 210, 0.15);
+  --color-steel-glow: rgba(130, 170, 210, 0.25);
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 8px 24px -6px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 16px 40px -10px rgba(0, 0, 0, 0.5);
+  --shadow-hover: 0 20px 40px -12px rgba(0, 0, 0, 0.55);
+}
+
+[data-bs-theme="dark"] body {
+  background: linear-gradient(165deg, #0b1120 0%, #0f172a 50%, #1a2332 100%);
+}
+
+/* Dark mode rain - slightly brighter drops */
+[data-bs-theme="dark"] body::before {
+  background-image: 
+    radial-gradient(2px 18px at 20px 30px, rgba(160, 200, 255, 0.35) 50%, transparent),
+    radial-gradient(2px 18px at 80px 70px, rgba(160, 200, 255, 0.28) 50%, transparent),
+    radial-gradient(1.5px 14px at 150px 20px, rgba(160, 200, 255, 0.32) 50%, transparent),
+    radial-gradient(2px 20px at 220px 90px, rgba(160, 200, 255, 0.25) 50%, transparent),
+    radial-gradient(1.5px 16px at 300px 40px, rgba(160, 200, 255, 0.32) 50%, transparent),
+    radial-gradient(2px 18px at 380px 110px, rgba(160, 200, 255, 0.28) 50%, transparent),
+    radial-gradient(1.5px 15px at 460px 25px, rgba(160, 200, 255, 0.32) 50%, transparent),
+    radial-gradient(2px 19px at 540px 80px, rgba(160, 200, 255, 0.25) 50%, transparent),
+    radial-gradient(1.5px 14px at 620px 50px, rgba(160, 200, 255, 0.32) 50%, transparent),
+    radial-gradient(2px 17px at 700px 100px, rgba(160, 200, 255, 0.28) 50%, transparent);
+  opacity: 0.45;
+}
+
+[data-bs-theme="dark"] body::after {
+  background-image: 
+    radial-gradient(1.5px 12px at 40px 40px, rgba(180, 210, 255, 0.3) 50%, transparent),
+    radial-gradient(1px 10px at 120px 80px, rgba(180, 210, 255, 0.25) 50%, transparent),
+    radial-gradient(1.5px 13px at 200px 20px, rgba(180, 210, 255, 0.3) 50%, transparent),
+    radial-gradient(1px 11px at 280px 100px, rgba(180, 210, 255, 0.22) 50%, transparent),
+    radial-gradient(1.5px 12px at 360px 50px, rgba(180, 210, 255, 0.3) 50%, transparent),
+    radial-gradient(1px 10px at 440px 90px, rgba(180, 210, 255, 0.25) 50%, transparent),
+    radial-gradient(1.5px 13px at 520px 30px, rgba(180, 210, 255, 0.3) 50%, transparent),
+    radial-gradient(1px 11px at 600px 70px, rgba(180, 210, 255, 0.22) 50%, transparent),
+    radial-gradient(1.5px 12px at 680px 45px, rgba(180, 210, 255, 0.3) 50%, transparent);
+  opacity: 0.35;
+}
+
+[data-bs-theme="dark"] .content-section {
+  background: var(--color-bg-content);
+  border-color: var(--color-border);
+  box-shadow: var(--shadow-md);
+}
+
+[data-bs-theme="dark"] .content-section:hover {
+  border-color: #475569;
+  box-shadow: var(--shadow-hover);
+}
+
+[data-bs-theme="dark"] .article-img {
+  border-color: #1e293b;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+}
+
+[data-bs-theme="dark"] .account-img {
+  border-color: #1e293b;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+/* Dark mode buttons */
+[data-bs-theme="dark"] .btn-outline-primary {
+  --bs-btn-color: #93c5fd;
+  --bs-btn-border-color: #60a5fa;
+  --bs-btn-hover-color: #0f172a;
+  --bs-btn-hover-bg: #93c5fd;
+  --bs-btn-hover-border-color: #93c5fd;
+}
+
+[data-bs-theme="dark"] .btn-primary {
+  --bs-btn-bg: #3b82f6;
+  --bs-btn-border-color: #3b82f6;
+  --bs-btn-hover-bg: #2563eb;
+  --bs-btn-hover-border-color: #2563eb;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.35);
+}
+
+[data-bs-theme="dark"] .btn-outline-secondary {
+  --bs-btn-color: #cbd5e1;
+  --bs-btn-border-color: #64748b;
+  --bs-btn-hover-color: #0f172a;
+  --bs-btn-hover-bg: #cbd5e1;
+}
+
+[data-bs-theme="dark"] .btn-outline-danger {
+  --bs-btn-color: #fca5a5;
+  --bs-btn-border-color: #f87171;
+  --bs-btn-hover-color: #0f172a;
+  --bs-btn-hover-bg: #fca5a5;
+}
+
+[data-bs-theme="dark"] .btn-danger {
+  --bs-btn-bg: #ef4444;
+  --bs-btn-border-color: #ef4444;
+  --bs-btn-hover-bg: #dc2626;
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.35);
+}
+
+/* ======================
+   Modal polish
+====================== */
+.modal-header.bg-success {
+  background: linear-gradient(135deg, #2f855a, #38a169) !important;
+}
+
+.modal-header.bg-danger {
+  background: linear-gradient(135deg, #c53030, #e53e3e) !important;
+}
+
+.modal-header.bg-success .modal-title,
+.modal-header.bg-danger .modal-title {
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
+.modal-content {
+  border-radius: var(--radius-lg);
+  border: none;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+/* ======================
+   Responsive
+====================== */
+@media (max-width: 768px) {
+  .account-heading {
+    font-size: 1.9rem;
+  }
+
+  .article-img {
+    height: 3.25rem;
+    width: 3.25rem;
+  }
+
+  main {
+    padding-top: 4.75rem;
+  }
+
+  /* Slightly reduce rain intensity on mobile */
+  body::before,
+  body::after {
+    opacity: 0.35;
+  }
+}
+
+/* Soft entrance animation for cards */
+@keyframes softRise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.content-section {
+  animation: softRise s ease-out both;
+}
+      
+    </style>
+
+  </head>
+
+  <body class="d-flex flex-column min-vh-100">
+    <header class="site-header">
+      <nav class="navbar navbar-expand-md fixed-top" data-bs-theme="dark">
+        <div class="container">
+          <a class="navbar-brand me-4" href="{{ url_for("home") }}">FastAPI Blog</a>
+
+          <button class="navbar-toggler"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#navbarToggle"
+                  aria-controls="navbarToggle"
+                  aria-expanded="false"
+                  aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarToggle">
+            <div class="navbar-nav me-auto">
+              <a class="nav-link active" aria-current="page" href="{{ url_for("home") }}">Home</a>
+            </div>
+
+            <!-- Navbar Right Side -->
+            <div class="navbar-nav align-items-md-center gap-2">
+              <a class="btn btn-outline-light" href="#">Login</a>
+              <a class="btn btn-light" href="#">Register</a>
+
+              <div class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle px-3"
+                   href="#"
+                   role="button"
+                   id="bd-theme"
+                   data-bs-toggle="dropdown"
+                   aria-expanded="false">
+                  <span id="bd-theme-text">🌗 Auto</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-theme">
+                  <li>
+                    <button class="dropdown-item" type="button" data-bs-theme-value="light">🌝 Light</button>
+                  </li>
+                  <li>
+                    <button class="dropdown-item" type="button" data-bs-theme-value="dark">🌚 Dark</button>
+                  </li>
+                  <li>
+                    <button class="dropdown-item" type="button" data-bs-theme-value="auto">🌗 Auto</button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main role="main" class="container">
+      <div class="row g-4">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+          <div class="content-card">
+            {% block content %}
+            {% endblock content %}
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="col-lg-4">
+          <div class="sidebar-card">
+            <h3>Our Sidebar</h3>
+            <p class="text-body-secondary small mb-3">
+              You can put any information here you'd like.
+            </p>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">Latest Posts</li>
+              <li class="list-group-item">Announcements</li>
+              <li class="list-group-item">Calendars</li>
+              <li class="list-group-item">etc</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="mt-auto py-4">
+      <div class="container text-center">
+        <p class="text-body-secondary mb-0 small">
+          © <span id="year"></span> Phyo Thant
+        </p>
+      </div>
+    </footer>
+
+    <!-- Set the current year in the footer -->
+    <script>
+      document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+            crossorigin="anonymous"></script>
+
+    <!-- Dark Mode Toggle -->
+    <script>
+      const setTheme = (theme) => {
+        if (theme === 'auto') {
+          document.documentElement.setAttribute('data-bs-theme',
+            window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        } else {
+          document.documentElement.setAttribute('data-bs-theme', theme);
+        }
+        localStorage.setItem('theme', theme);
+
+        // Update button text
+        const themeText = { light: '🌝 Light', dark: '🌚 Dark', auto: '🌗 Auto' };
+        document.getElementById('bd-theme-text').textContent = themeText[theme];
+      };
+
+      // Set theme on click
+      document.querySelectorAll('[data-bs-theme-value]').forEach(button => {
+        button.addEventListener('click', () => setTheme(button.getAttribute('data-bs-theme-value')));
+      });
+
+      // Initialize
+      setTheme(localStorage.getItem('theme') || 'auto');
+    </script>
+  </body>
+</html>
