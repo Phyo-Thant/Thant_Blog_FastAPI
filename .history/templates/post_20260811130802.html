@@ -23,15 +23,15 @@
         <h2 class="article-title mb-3">{{ post.title }}</h2>
 
         <!-- Post image (only if exists) -->
-        {% if post.image_file %}
-          <div class="mb-3">
-            <img src="{{ url_for('static', path='post_images/' + post.image_file) }}"
-                alt="Image for {{ post.title }}"
-                class="img-fluid rounded-3"
-                style="max-height: 320px; object-fit: cover; width: 100%;"
-                loading="lazy">
-          </div>
-        {% endif %}
+{% if post.image_file %}
+  <div class="mb-3">
+    <img src="{{ url_for('static', path='post_images/' + post.image_file) }}"
+         alt="Image for {{ post.title }}"
+         class="img-fluid rounded-3"
+         style="max-height: 320px; object-fit: cover; width: 100%;"
+         loading="lazy">
+  </div>
+{% endif %}
 
         <p class="article-content mb-0">{{ post.content }}</p>
 

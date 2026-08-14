@@ -177,6 +177,7 @@ def update_user(
             )
             
     update_data = user_update.model_dump(exclude_unset=True)
+
     if "username" in update_data:
         user.username = update_data["username"]
     if "email" in update_data:

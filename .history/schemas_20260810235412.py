@@ -15,7 +15,7 @@ class UserCreate(UserBase):
 class UserUpdate(BaseModel):
     username: str | None = Field(default=None, min_length=1, max_length=50)
     email: EmailStr | None = Field(default=None, max_length=120)
-    image_file: str | None = Field(default=None, max_length=200)
+    image_file: str | None = Field(default=None, min_length=1, max_length=200)
     
 
 class UserResponse(UserBase):
@@ -32,13 +32,13 @@ class PostBase(BaseModel):
 
 
 class PostCreate(PostBase):
-    user_id: int  # still temporary until you add auth
-
+    user_id: int  # TEMPORARY
+    
 
 class PostUpdate(BaseModel):
     title: str | None = Field(default=None, min_length=1, max_length=100)
     content: str | None = Field(default=None, min_length=1)
-    # image is handled separately via UploadFile, so not included here
+    
 
 
 class PostResponse(PostBase):
@@ -46,6 +46,5 @@ class PostResponse(PostBase):
 
     id: int
     user_id: int
-    image_file: str | None
     date_posted: datetime
     author: UserResponse

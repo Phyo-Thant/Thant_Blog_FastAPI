@@ -160,7 +160,8 @@ def update_user(
         result = db.execute(
             select(models.User).where(models.User.username == user_update.username),
         )
-        if result.scalars().first():
+        existing_user = result.scalars().first()
+        if existing_user:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Username already exists",
@@ -170,19 +171,19 @@ def update_user(
         result = db.execute(
             select(models.User).where(models.User.email == user_update.email),
         )
-        if result.scalars().first():
+        existing_email = result.scalars().first()
+        if existing_email:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Email already registered",
             )
-            
-    update_data = user_update.model_dump(exclude_unset=True)
-    if "username" in update_data:
-        user.username = update_data["username"]
-    if "email" in update_data:
-        user.email = update_data["email"]
-    if "image_file" in update_data:
-        user.image_file = update_data["image_file"] 
+
+    if user_update.username is not None:
+        user.username = user_update.username
+    if user_update.email is not None:
+        user.email = user_update.email
+    if user_update.image_file is not None:
+        user.image_file = user_update.image_file
 
     db.commit()
     db.refresh(user)

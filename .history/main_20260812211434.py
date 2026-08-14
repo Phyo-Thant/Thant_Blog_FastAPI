@@ -156,6 +156,7 @@ def update_user(
             detail="User not found",
         )
 
+    # uniqueness checks (keep your existing ones)
     if user_update.username is not None and user_update.username != user.username:
         result = db.execute(
             select(models.User).where(models.User.username == user_update.username),
@@ -175,12 +176,16 @@ def update_user(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Email already registered",
             )
-            
+
+    # Only update fields that were actually sent
     update_data = user_update.model_dump(exclude_unset=True)
+
     if "username" in update_data:
         user.username = update_data["username"]
     if "email" in update_data:
         user.email = update_data["email"]
+
+    # This is the important part for removing the picture
     if "image_file" in update_data:
         user.image_file = update_data["image_file"] 
 

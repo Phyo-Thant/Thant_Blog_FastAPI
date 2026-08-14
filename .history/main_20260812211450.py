@@ -175,8 +175,8 @@ def update_user(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Email already registered",
             )
-            
     update_data = user_update.model_dump(exclude_unset=True)
+
     if "username" in update_data:
         user.username = update_data["username"]
     if "email" in update_data:

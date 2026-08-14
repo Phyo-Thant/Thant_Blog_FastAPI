@@ -28,10 +28,7 @@
             </a>
           </h2>
 
-
-          <p class="article-content mb-0">{{ post.content }}</p><br>
-
-                    <!-- Post image (only if exists) -->
+          <!-- Post image (only if exists) -->
           {% if post.image_file %}
             <div class="mb-4">
               <img src="{{ url_for('static', path='post_images/' + post.image_file) }}"
@@ -42,6 +39,7 @@
             </div>
           {% endif %}
 
+          <p class="article-content mb-0">{{ post.content }}</p>
         </div>
       </div>
     </article>

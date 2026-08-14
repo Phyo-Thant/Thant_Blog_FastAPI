@@ -4,7 +4,6 @@
   {% for post in posts %}
     <article class="content-section py-4 px-4 px-md-5 mb-4">
       <div class="d-flex align-items-start gap-3 gap-md-4">
-        <!-- Author profile picture -->
         <img class="article-img flex-shrink-0"
              src="{{ post.author.image_path }}"
              alt="{{ post.author.username }}'s profile picture"
@@ -28,20 +27,7 @@
             </a>
           </h2>
 
-
-          <p class="article-content mb-0">{{ post.content }}</p><br>
-
-                    <!-- Post image (only if exists) -->
-          {% if post.image_file %}
-            <div class="mb-4">
-              <img src="{{ url_for('static', path='post_images/' + post.image_file) }}"
-                  alt="Image for {{ post.title }}"
-                  class="img-fluid rounded-3 shadow-sm"
-                  style="max-height: 420px; object-fit: cover; width: 100%;"
-                  loading="lazy">
-            </div>
-          {% endif %}
-
+          <p class="article-content mb-0">{{ post.content }}</p>
         </div>
       </div>
     </article>

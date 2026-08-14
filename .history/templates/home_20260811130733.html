@@ -28,20 +28,18 @@
             </a>
           </h2>
 
-
-          <p class="article-content mb-0">{{ post.content }}</p><br>
-
-                    <!-- Post image (only if exists) -->
+          <!-- Post image (only if exists) -->
           {% if post.image_file %}
-            <div class="mb-4">
-              <img src="{{ url_for('static', path='post_images/' + post.image_file) }}"
-                  alt="Image for {{ post.title }}"
-                  class="img-fluid rounded-3 shadow-sm"
-                  style="max-height: 420px; object-fit: cover; width: 100%;"
-                  loading="lazy">
-            </div>
-          {% endif %}
+  <div class="mb-4">
+    <img src="{{ url_for('static', path='post_images/' + post.image_file) }}"
+         alt="Image for {{ post.title }}"
+         class="img-fluid rounded-3 shadow-sm"
+         style="max-height: 420px; object-fit: cover; width: 100%;"
+         loading="lazy">
+  </div>
+{% endif %}
 
+          <p class="article-content mb-0">{{ post.content }}</p>
         </div>
       </div>
     </article>

@@ -43,6 +43,57 @@ def home(request: Request, db: Annotated[Session, Depends(get_db)]):
         {"posts": posts, "title": "Home"},
     )
 
+# posts: list[dict] = [
+#     {
+#         "id": 1,
+#         "author": "Phyo Thant",
+#         "title": "FastAPI is Awesome",
+#         "content": "This framework is really easy to use and super fast.",
+#         "date_posted": "April 20, 2025",
+#     },
+#     {
+#         "id": 2,
+#         "author": "Chan Lin Thaw",
+#         "title": " ",
+#         "content": ".",
+#         "date_posted": "April 21, 2025",Python is a great language for web development, and FastAPI makes it even better
+#     },
+#     {
+#         "id": 3,
+#         "author": "Thiha Zaw",
+#         "title": "Getting Started with APIs",
+#         "content": "APIs allow different applications to communicate with each other efficiently.",
+#         "date_posted": "April 22, 2025",
+#     },
+#     {
+#         "id": 4,
+#         "author": "Alice Johnson",
+#         "title": "Why Learn Python?",
+#         "content": "Python is beginner-friendly, powerful, and widely used in many industries.",
+#         "date_posted": "April 23, 2025",
+#     },
+#     {
+#         "id": 5,
+#         "author": "Michael Brown",e
+#         "title": "Understanding Databases",
+#         "content": "Databases help applications store, organize, and retrieve data effectively.",
+#         "date_posted": "April 24, 2025",
+#     },
+#     {
+#         "id": 6,
+#         "author": "Emily Davis",
+#         "title": "Introduction to PostgreSQL",
+#         "content": "PostgreSQL is a robust open-source relational database system.",
+#         "date_posted": "April 25, 2025",
+#     },
+#     {
+#         "id": 7,
+#         "author": "David Wilson",
+#         "title": "Building RESTful Services",
+#         "content": "RESTful APIs provide a standard way for clients and servers to exchange data.",
+#         "date_posted": "April 26, 2025",
+#     },    
+# ]
 
 
  
@@ -160,7 +211,8 @@ def update_user(
         result = db.execute(
             select(models.User).where(models.User.username == user_update.username),
         )
-        if result.scalars().first():
+        existing_user = result.scalars().first()
+        if existing_user:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Username already exists",
@@ -170,19 +222,19 @@ def update_user(
         result = db.execute(
             select(models.User).where(models.User.email == user_update.email),
         )
-        if result.scalars().first():
+        existing_email = result.scalars().first()
+        if existing_email:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Email already registered",
             )
-            
-    update_data = user_update.model_dump(exclude_unset=True)
-    if "username" in update_data:
-        user.username = update_data["username"]
-    if "email" in update_data:
-        user.email = update_data["email"]
-    if "image_file" in update_data:
-        user.image_file = update_data["image_file"] 
+
+    if user_update.username is not None:
+        user.username = user_update.username
+    if user_update.email is not None:
+        user.email = user_update.email
+    if user_update.image_file is not None:
+        user.image_file = user_update.image_file
 
     db.commit()
     db.refresh(user)
@@ -261,55 +313,33 @@ def get_post(post_id: int, db: Annotated[Session, Depends(get_db)]):
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Post not found")
 
 
-def _save_post_image(image: UploadFile) -> str:
-    """Save uploaded image and return the filename."""
-    ext = Path(image.filename).suffix.lower()
-    filename = f"{uuid.uuid4().hex}{ext}"
-    file_path = UPLOAD_DIR / filename
-    with file_path.open("wb") as buffer:
-        shutil.copyfileobj(image.file, buffer)
-    return filename
-
-
-def _delete_post_image(filename: str | None) -> None:
-    """Delete an old post image if it exists."""
-    if filename:
-        old_path = UPLOAD_DIR / filename
-        if old_path.exists():
-            old_path.unlink()
-
-
 @app.put("/api/posts/{post_id}", response_model=PostResponse)
-async def update_post_full(
+def update_post_full(
     post_id: int,
-    title: Annotated[str, Form(min_length=1, max_length=100)],
-    content: Annotated[str, Form(min_length=1)],
-    user_id: Annotated[int, Form()],
-    image: Annotated[UploadFile | None, File()] = None,  # optional new image
-    db: Annotated[Session, Depends(get_db)] = None,
+    post_data: PostCreate,
+    db: Annotated[Session, Depends(get_db)],
 ):
     result = db.execute(select(models.Post).where(models.Post.id == post_id))
     post = result.scalars().first()
     if not post:
-        raise HTTPException(status_code=404, detail="Post not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Post not found"
+        )
 
-    # Optional: check that the new user_id exists
-    if user_id != post.user_id:
-        result = db.execute(select(models.User).where(models.User.id == user_id))
-        if not result.scalars().first():
-            raise HTTPException(status_code=404, detail="User not found")
+    if post_data.user_id != post.user_id:
+        result = db.execute(
+            select(models.User).where(models.User.id == post_data.user_id),
+        )
+        user = result.scalars().first()
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="User not found",
+            )
 
-    # Update text fields
-    post.title = title
-    post.content = content
-    post.user_id = user_id
-
-    # Handle new image (if provided)
-    if image and image.filename:
-        # Delete old image
-        _delete_post_image(post.image_file)
-        # Save new one
-        post.image_file = _save_post_image(image)
+    post.title = post_data.title
+    post.content = post_data.content
+    post.user_id = post_data.user_id
 
     db.commit()
     db.refresh(post)
@@ -317,31 +347,21 @@ async def update_post_full(
 
 
 @app.patch("/api/posts/{post_id}", response_model=PostResponse)
-async def update_post_partial(
+def update_post_partial(
     post_id: int,
-    title: Annotated[str | None, Form(min_length=1, max_length=100)] = None,
-    content: Annotated[str | None, Form(min_length=1)] = None,
-    image: Annotated[UploadFile | None, File()] = None,  # optional new image
-    clear_image: Annotated[bool, Form()] = False,        # set to true to remove image
-    db: Annotated[Session, Depends(get_db)] = None,
+    post_data: PostUpdate,
+    db: Annotated[Session, Depends(get_db)],
 ):
     result = db.execute(select(models.Post).where(models.Post.id == post_id))
     post = result.scalars().first()
     if not post:
-        raise HTTPException(status_code=404, detail="Post not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Post not found"
+        )
 
-    if title is not None:
-        post.title = title
-    if content is not None:
-        post.content = content
-
-    # Handle image
-    if clear_image:
-        _delete_post_image(post.image_file)
-        post.image_file = None
-    elif image and image.filename:
-        _delete_post_image(post.image_file)
-        post.image_file = _save_post_image(image)
+    update_data = post_data.model_dump(exclude_unset=True)
+    for field, value in update_data.items():
+        setattr(post, field, value)
 
     db.commit()
     db.refresh(post)
