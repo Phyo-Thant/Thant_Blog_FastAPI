@@ -56,7 +56,7 @@ app.include_router(posts.router, prefix="/api/posts", tags=["Posts"])
 async def home(request: Request, db: Annotated[AsyncSession, Depends(get_db)]):
     result = await db.execute(select(models.Post)
                               .options(selectinload(models.Post.author))
-                              .order_by(models.Post.date_posted.desc()),)
+                              .order_by(models.Post.created_at.desc()),)
     posts = result.scalars().all()
     return templates.TemplateResponse(
         request,
@@ -100,7 +100,7 @@ async def user_posts(
         select(models.Post)
         .options(selectinload(models.Post.author))
         .where(models.Post.user_id == user_id)
-        .order_by(models.Post.date_posted.desc()),
+        .order_by(models.Post.created_at.desc())
     )
     posts = result.scalars().all()
 

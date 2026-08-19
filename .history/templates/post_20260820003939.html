@@ -22,19 +22,7 @@
       </div>
 
       <h2 class="article-title">{{ post.title }}</h2>
-
       <p class="article-content">{{ post.content }}</p>
-
-      <!-- Post image (only if exists) -->
-      {% if post.image_file %}
-        <div class="mt-3 mb-3">
-          <img src="{{ url_for('static', path='post_images/' + post.image_file) }}"
-               alt="Image for {{ post.title }}"
-               class="img-fluid rounded-3"
-               style="max-height: 420px; object-fit: cover; width: 100%;"
-               loading="lazy">
-        </div>
-      {% endif %}
 
       <!-- Only show edit/delete options if user_id is 1 (TEMPORARY) -->
       {% if post.user_id == 1 %}
@@ -72,76 +60,58 @@
   const editModal = document.getElementById("editModal");
   if (editModal) {
     editModal.addEventListener("show.bs.modal", () => {
-      // Fill title & content
       document.getElementById("editTitle").value = `{{ post.title|e }}`;
       document.getElementById("editContent").value = `{{ post.content|e }}`;
       document.querySelector('#editPostForm input[name="post_id"]').value = postId;
-
-      // Handle current image
-      const currentImagePreview = document.getElementById("currentImagePreview");
-      const currentImage = document.getElementById("currentImage");
-      const clearImageCheckbox = document.getElementById("clearImage");
-      const editImageInput = document.getElementById("editImage");
-
-      // Reset
-      clearImageCheckbox.checked = false;
-      editImageInput.value = "";
-
-      {% if post.image_file %}
-        currentImage.src = "{{ url_for('static', path='post_images/' + post.image_file) }}";
-        currentImagePreview.classList.remove("d-none");
-      {% else %}
-        currentImagePreview.classList.add("d-none");
-      {% endif %}
     });
   }
 
   // ========== EDIT POST ==========
-  const editForm = document.getElementById("editPostForm");
-  if (editForm) {
-    editForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
+const editForm = document.getElementById("editPostForm");
+if (editForm) {
+  editForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-      const formData = new FormData(editForm);
-      // We don't need post_id in the body
-      formData.delete("post_id");
+    const formData = new FormData(editForm);
+    // We don't need post_id in the body
+    formData.delete("post_id");
 
-      try {
-        const response = await fetch(`/api/posts/${postId}`, {
-          method: "PATCH",
-          // Do NOT set Content-Type – browser will set multipart/form-data
-          body: formData,
-        });
+    try {
+      const response = await fetch(`/api/posts/${postId}`, {
+        method: "PATCH",
+        // Do NOT set Content-Type – browser will set multipart/form-data
+        body: formData,
+      });
 
-        if (response.ok) {
-          document.getElementById("successMessage").textContent =
-            "Post updated successfully!";
+      if (response.ok) {
+        document.getElementById("successMessage").textContent =
+          "Post updated successfully!";
 
-          hideModal("editModal");
-          showModal("successModal");
+        hideModal("editModal");
+        showModal("successModal");
 
-          document
-            .getElementById("successModal")
-            .addEventListener(
-              "hidden.bs.modal",
-              () => window.location.reload(),
-              { once: true }
-            );
-        } else {
-          const error = await response.json();
-          document.getElementById("errorMessage").textContent =
-            getErrorMessage(error);
-
-          hideModal("editModal");
-          showModal("errorModal");
-        }
-      } catch (error) {
+        document
+          .getElementById("successModal")
+          .addEventListener(
+            "hidden.bs.modal",
+            () => window.location.reload(),
+            { once: true }
+          );
+      } else {
+        const error = await response.json();
         document.getElementById("errorMessage").textContent =
-          "Network error. Please check your connection and try again.";
+          getErrorMessage(error);
+
+        hideModal("editModal");
         showModal("errorModal");
       }
-    });
-  }
+    } catch (error) {
+      document.getElementById("errorMessage").textContent =
+        "Network error. Please check your connection and try again.";
+      showModal("errorModal");
+    }
+  });
+}
 
   // ========== DELETE POST ==========
   const deleteButton = document.getElementById("confirmDelete");

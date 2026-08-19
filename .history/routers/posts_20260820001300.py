@@ -127,7 +127,7 @@ async def update_post_full(
         post.image_file = _save_post_image(image)
 
     await db.commit()
-    await db.refresh(post, attribute_names=["author"])
+    await db.refresh(post)
     return post
 
 
@@ -158,11 +158,11 @@ async def update_post_partial(
         post.image_file = _save_post_image(image)
 
     await db.commit()
-    await db.refresh(post, attribute_names=["author"])
+    await db.refresh(post)
     return post
 
 
-@router.delete("/{post_id}", status_code=status.HTTP_204_NO_CONTENT)
+router.delete("/{post_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_post(
     post_id: int,
     db: Annotated[AsyncSession, Depends(get_db)],

@@ -1,5 +1,4 @@
 {% extends "layout.html" %}
-
 {% block content %}
 <article class="content-section py-3 px-4 mb-4">
   <div class="d-flex align-items-start gap-4">
@@ -72,27 +71,9 @@
   const editModal = document.getElementById("editModal");
   if (editModal) {
     editModal.addEventListener("show.bs.modal", () => {
-      // Fill title & content
       document.getElementById("editTitle").value = `{{ post.title|e }}`;
       document.getElementById("editContent").value = `{{ post.content|e }}`;
       document.querySelector('#editPostForm input[name="post_id"]').value = postId;
-
-      // Handle current image
-      const currentImagePreview = document.getElementById("currentImagePreview");
-      const currentImage = document.getElementById("currentImage");
-      const clearImageCheckbox = document.getElementById("clearImage");
-      const editImageInput = document.getElementById("editImage");
-
-      // Reset
-      clearImageCheckbox.checked = false;
-      editImageInput.value = "";
-
-      {% if post.image_file %}
-        currentImage.src = "{{ url_for('static', path='post_images/' + post.image_file) }}";
-        currentImagePreview.classList.remove("d-none");
-      {% else %}
-        currentImagePreview.classList.add("d-none");
-      {% endif %}
     });
   }
 

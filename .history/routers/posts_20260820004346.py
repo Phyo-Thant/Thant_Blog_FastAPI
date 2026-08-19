@@ -127,7 +127,7 @@ async def update_post_full(
         post.image_file = _save_post_image(image)
 
     await db.commit()
-    await db.refresh(post, attribute_names=["author"])
+    await db.refresh(post)
     return post
 
 
@@ -158,7 +158,7 @@ async def update_post_partial(
         post.image_file = _save_post_image(image)
 
     await db.commit()
-    await db.refresh(post, attribute_names=["author"])
+    await db.refresh(post)
     return post
 
 

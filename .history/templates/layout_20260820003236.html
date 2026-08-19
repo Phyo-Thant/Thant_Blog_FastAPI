@@ -797,10 +797,9 @@ a.article-title:focus {
                         data-bs-dismiss="modal"
                         aria-label="Close"></button>
               </div>
-              <form id="editPostForm" enctype="multipart/form-data">
+              <form id="editPostForm">
                 <div class="modal-body">
                   <input type="hidden" name="post_id" value="">
-
                   <div class="mb-3">
                     <label for="editTitle" class="form-label">Title</label>
                     <input type="text"
@@ -809,7 +808,6 @@ a.article-title:focus {
                           name="title"
                           required>
                   </div>
-
                   <div class="mb-3">
                     <label for="editContent" class="form-label">Content</label>
                     <textarea class="form-control"
@@ -818,37 +816,7 @@ a.article-title:focus {
                               rows="5"
                               required></textarea>
                   </div>
-
-                  <!-- Current image preview -->
-                  <div id="currentImagePreview" class="mb-3 d-none">
-                    <label class="form-label">Current Image</label>
-                    <div>
-                      <img id="currentImage" 
-                          src="" 
-                          alt="Current post image"
-                          class="img-fluid rounded-3 mb-2"
-                          style="max-height: 200px; object-fit: cover;">
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" id="clearImage" name="clear_image" value="true">
-                      <label class="form-check-label" for="clearImage">
-                        Remove current image
-                      </label>
-                    </div>
-                  </div>
-
-                  <!-- New image upload -->
-                  <div class="mb-3">
-                    <label for="editImage" class="form-label">Change Image (optional)</label>
-                    <input type="file"
-                          class="form-control"
-                          id="editImage"
-                          name="image"
-                          accept="image/*">
-                    <div class="form-text">Leave empty to keep the current image.</div>
-                  </div>
                 </div>
-
                 <div class="modal-footer">
                   <button type="button"
                           class="btn btn-outline-secondary"

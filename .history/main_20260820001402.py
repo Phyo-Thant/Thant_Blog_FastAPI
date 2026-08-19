@@ -100,7 +100,7 @@ async def user_posts(
         select(models.Post)
         .options(selectinload(models.Post.author))
         .where(models.Post.user_id == user_id)
-        .order_by(models.Post.date_posted.desc()),
+        Post.date_posted.desc()),
     )
     posts = result.scalars().all()
 
